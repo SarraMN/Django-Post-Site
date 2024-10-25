@@ -1,0 +1,26 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Blog - Post List{% endblock %}
+
+{% block content %}
+  <h2>Blog Posts</h2>
+  {% for post in posts %}
+    <article>
+      <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
+      <p>
+        <small>
+          {% if post.publish %}
+            Published {{ post.publish|date:"F j, Y" }} 
+          {% endif %}
+          {% if post.author %}
+            by {{ post.author }}
+          {% endif %}
+        </small>
+      </p>
+      {% if post.status %}
+        <p>Status: {{ post.get_status_display }}</p>
+      {% endif %}
+      <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+    </article>
+  {% endfor %}
+{% endblock %}

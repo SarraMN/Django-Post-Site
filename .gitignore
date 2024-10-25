@@ -1,0 +1,22 @@
+# Python and Django
+*.pyc
+__pycache__/
+db.sqlite3
+/static/
+/media/
+*.log
+*.pot
+*.py[cod]
+*.sqlite3
+*.pyproj
+*__pycache__/
+*.swp
+.venv
+env/
+venv/
+venv.bak/
+Pipfile.lock
+*.pyo
+*.pyd
+.idea/
+.vscode/
