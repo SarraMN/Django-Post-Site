@@ -6,10 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Blog{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Navigation menu styles */
+        nav ul {
+            list-style-type: none; /* Remove bullet points */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end; /* Align items to the right */
+            background-color: #35424a;
+            font-size: 18px;
+
+        }
+
+        nav ul li {
+            margin-right: 20px; /* Space between menu items */
+        }
+
+        nav ul li:last-child {
+            margin-right: 0; /* No extra margin for the last item */
+        }
+
+        nav ul li a {
+            color: #ffffff; /* White text */
+            text-decoration: none; /* Remove underline */
+            padding: 10px 15px; /* Add padding for better click area */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+            text-transform: uppercase; /* Make text uppercase */
+        }
+
+        nav ul li a:hover {
+            color: #ed3978; /* Ensure text stays white on hover */
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Welcome to My Blog</h1>
+        <nav>
+            <ul>      
+                <li><a href="{% url 'authentication:logout' %}">Logout</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
         {% block content %}
