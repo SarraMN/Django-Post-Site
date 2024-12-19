@@ -8,38 +8,346 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Navigation menu styles */
-        nav ul {
-            list-style-type: none; /* Remove bullet points */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: flex-end; /* Align items to the right */
-            background-color: #35424a;
-            font-size: 18px;
+       /* style.css */
 
-        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
 
-        nav ul li {
-            margin-right: 20px; /* Space between menu items */
-        }
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 10px 0;
+    text-align: center;
+}
 
-        nav ul li:last-child {
-            margin-right: 0; /* No extra margin for the last item */
-        }
+h1 {
+    margin: 0;
+}
 
-        nav ul li a {
-            color: #ffffff; /* White text */
-            text-decoration: none; /* Remove underline */
-            padding: 10px 15px; /* Add padding for better click area */
-            border-radius: 5px; /* Rounded corners */
-            transition: background-color 0.3s ease; /* Smooth hover effect */
-            text-transform: uppercase; /* Make text uppercase */
-        }
+main {
+    margin: 20px;
+}
 
-        nav ul li a:hover {
-            color: #ed3978; /* Ensure text stays white on hover */
-        }
+article {
+    background: #ffffff;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h3 a {
+    text-decoration: none;
+    color: #35424a;
+}
+
+h3 a:hover {
+    color: #007bff;
+}
+
+p small {
+    color: #666;
+}
+
+p {
+    line-height: 1.6;
+}
+
+/* Styling for the post image */
+.post-photo img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+    border-radius: 8px; /* Rounded corners for the image */
+    margin-right: 20px; /* Adds spacing between image and text */
+}
+
+/* Button styling */
+.like-btn, .share-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: #35424a;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    text-align: center;
+}
+
+.like-btn:hover, .share-btn:hover {
+    background-color: #ed3978; /* Color change on hover */
+}
+
+.like-btn i, .share-btn i {
+    margin-right: 5px; /* Adds spacing between the icon and text */
+}
+/* Layout adjustments for articles */
+article {
+    background: #ffffff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    display: flex;
+    gap: 20px;
+}
+
+.post-header {
+    flex: 1;
+}
+
+h3 a {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.post-header p {
+    margin-top: 10px;
+}
+
+.post-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+/* Improved navigation menu */
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    background-color: #35424a;
+    font-size: 18px;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #ed3978;
+}
+/* General text styling */
+p {
+    line-height: 1.6;
+    color: #333; /* Darker text for readability */
+}
+
+h3 {
+    margin-top: 0;
+}
+
+small {
+    font-size: 14px;
+    color: #666;
+}
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+}
+
+/* Navigation styling */
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    background-color: #35424a;
+    font-size: 18px;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #ed3978;
+}
+
+/* Main content area */
+main {
+    margin: 20px;
+}
+
+/* Article styles */
+article {
+    background: #ffffff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 20px;
+}
+
+.post-header {
+    flex: 1;
+}
+
+.post-photo img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+h3 a {
+    text-decoration: none;
+    color: #35424a;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+h3 a:hover {
+    color: #007bff;
+}
+
+p small {
+    color: #666;
+}
+
+p {
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Post action buttons (Like & Share) */
+.post-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.like-btn, .share-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: #35424a;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    text-align: center;
+}
+
+.like-btn:hover, .share-btn:hover {
+    background-color: #ed3978;
+}
+
+.like-btn i, .share-btn i {
+    margin-right: 5px;
+}
+/* Post layout with flexbox */
+article {
+    background: #ffffff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 20px;
+}
+
+.post-header {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.post-photo {
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0; /* Prevent image from shrinking */
+    margin-right: 20px;
+}
+
+.post-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.post-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.post-info {
+    margin-top: 10px;
+}
+
+.read-more {
+    color: blue;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.read-more:hover {
+    color: #0056b3;
+}
+
+/* Adjust text and layout styles */
+h3 a {
+    font-size: 24px;
+    font-weight: bold;
+    color: #35424a;
+    text-decoration: none;
+}
+
+h3 a:hover {
+    color: #007bff;
+}
+
+small {
+    font-size: 14px;
+    color: #666;
+}
     </style>
 </head>
 <body>
