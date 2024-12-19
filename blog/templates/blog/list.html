@@ -21,7 +21,7 @@
   {% endif %}
 
   {% for post in posts %}
-    <article>
+    <article class="article-item ">
       <div class="post-photo">
         {% if post.photo %}
           <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="post-img">
