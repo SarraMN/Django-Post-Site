@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse  # Ensure reverse is imported
 
 
 class Post(models.Model):
@@ -31,7 +32,10 @@ class Post(models.Model):
         indexes = [
             models.Index(fields=['-publish']),
         ]
-
+    
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', kwargs={'id': self.id})
+    
     def __str__(self):
         return self.title
 
@@ -56,7 +60,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     post = models.ForeignKey(
-        Post,
+        'Post',
         on_delete=models.CASCADE,
         related_name='likes'
     )

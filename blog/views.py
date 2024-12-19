@@ -23,7 +23,7 @@ def like_post(request, post_id):
         existing_like.delete()
     else:
         # If the user hasn't liked the post, create a new like
-        Like.objects.create(post=post, user=request.user, is_liked=True)
+        Like.objects.create(post=post, user=request.user)
     
     return redirect('blog:post_list')  # Redirect back to the post list page
 
@@ -33,9 +33,14 @@ def share_post_via_email(request, post_id):
     if request.method == 'POST':
         recipient_email = request.POST.get('email')
 
+        # Get the current user who is sharing the post
+        current_user = request.user
+
         # Construct the email subject and body
         subject = f"Check out this blog post: {post.title}"
-        body = f"Hi, \n\nI wanted to share this blog post with you: \n\n{post.title}\n\n{post.body}"
+        body = f"Hi, \n\n{current_user.username} wanted to share this blog post with you:\n\n{post.title}\n\n{post.body}\n\n"
+        body += f"Shared by: {current_user.username}\n\n"
+        body += f"Read more at: {request.build_absolute_uri(post.get_absolute_url())}"
 
         # Send the email
         send_mail(

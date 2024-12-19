@@ -60,14 +60,36 @@
           </a>
         {% endif %}
             <!-- Share Post via Email Form -->
+           <!-- Trigger button -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#shareModal">
+  <i class="fa fa-share-alt"></i> Share via Email
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalLabel">Share Post via Email</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
         <form method="POST" action="{% url 'blog:share_post_via_email' post.id %}">
           {% csrf_token %}
-          <label for="email">Share this post via email:</label>
-          <input type="email" name="email" id="email" required placeholder="Enter recipient's email">
-          <button type="submit" class="share-btn">
+          <div class="mb-3">
+            <label for="email" class="form-label">Recipient's Email</label>
+            <input type="email" class="form-control" name="email" id="email" required placeholder="Enter recipient's email">
+          </div>
+          <button type="submit" class="btn btn-primary">
             <i class="fa fa-share-alt"></i> Share via Email
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
         </div>
       </div>
     </article>
