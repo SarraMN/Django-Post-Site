@@ -8,7 +8,7 @@ from django.conf import settings
 
 @login_required
 def post_list(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(status=Post.Status.PUBLISHED)  # Filter for published posts
     liked_posts = Like.objects.filter(user=request.user).values_list('post', flat=True)  # Get liked posts by the current user
     return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts})
 
@@ -34,6 +34,26 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, 'blog/create_post.html', {'form': form})
+
+@login_required
+def edit_post(request, id):
+    post = get_object_or_404(Post, id=id, author=request.user)  # Ensure only the author can edit
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:user_posts')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
+
+@login_required
+def delete_post(request, id):
+    post = get_object_or_404(Post, id=id, author=request.user)  # Ensure only the author can delete
+    if request.method == "POST":
+        post.delete()
+        return redirect('blog:user_posts')
+    return render(request, 'blog/delete_post_confirm.html', {'post': post})
 
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)   
