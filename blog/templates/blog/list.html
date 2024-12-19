@@ -1,8 +1,17 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
 {% block title %}Blog - Post List{% endblock %}
 
 {% block content %}
+<!-- Create New Blog button placed under the nav -->
+<!-- Create New Blog button placed under the nav -->
+<div style="text-align: right; margin-top: 20px;">
+  <a href="{% url 'blog:create_post' %}" id="create-blog-btn" style="padding: 10px 20px; background-color: #ed3978; color: white; 
+            text-decoration: none; border-radius: 5px; cursor: pointer;">
+     Create New Blog
+  </a>
+</div>
   <h2>Blog Posts</h2>
   {% if user.is_authenticated %}
   <p>Welcome, {{ user.username }}!</p>

@@ -1,0 +1,27 @@
+{% extends "blog/base.html" %}
+
+{% block title %}My Blog Posts{% endblock %}
+
+{% block content %}
+<!-- Create New Blog button placed under the nav -->
+<div style="text-align: right; margin-top: 20px;">
+    <a href="{% url 'blog:create_post' %}" id="create-blog-btn" style="padding: 10px 20px; background-color: #ed3978; color: white; 
+              text-decoration: none; border-radius: 5px; cursor: pointer;">
+       Create New Blog
+    </a>
+</div>
+  <h2>My Blog Posts</h2>
+  {% if posts %}
+    {% for post in posts %}
+      <article>
+        <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
+        <p>
+          <small>Published {{ post.publish|date:"F j, Y" }}</small>
+        </p>
+        <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+      </article>
+    {% endfor %}
+  {% else %}
+    <p>You haven't published any blog posts yet.</p>
+  {% endif %}
+{% endblock %}

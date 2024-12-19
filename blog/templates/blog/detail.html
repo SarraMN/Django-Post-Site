@@ -3,10 +3,14 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
+  <div class="back-links">
+    <a href="{% url 'blog:post_list' %}" class="back-link">Back to all posts</a>
+    <a href="{% url 'blog:user_posts' %}" class="back-link">Back to my posts</a>
+  </div>
   <article>
     <h2>{{ post.title }}</h2>
     <p><small>Published {{ post.publish }} by {{ post.author }}</small></p>
     <p>{{ post.body|linebreaks }}</p>
   </article>
-  <a href="{% url 'blog:post_list' %}">Back to all posts</a>
+  
 {% endblock %}
