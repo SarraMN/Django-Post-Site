@@ -7,364 +7,314 @@
     <title>{% block title %}My Blog{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
- <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Bundle JS (includes Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+       /* General text styling */
+       p {
+            line-height: 1.6;
+            color: #333; /* Darker text for readability */
+        }
+        
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        
+        .post-header p {
+            margin-top: 10px;
+        }
+        
+        h1 {
+            margin: 0;
+        }
 
-<!-- Bootstrap Bundle JS (includes Popper.js) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+        .post-header {
+            flex: 1;
+        }
+        
+        h3 a {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        /* Main content area */
+        main {
+            margin: 20px;
+        } 
+        .post-header {
+            flex: 1;
+        }
+        
+        .post-photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+        
+        h3 a {
+            text-decoration: none;
+            color: #35424a;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        h3 a:hover {
+            color: #007bff;
+        }
+        
+        p small {
+            color: #666;
+        }
+        
+        p {
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Post action buttons (Like & Share) */
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .like-btn, .share-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            margin-right: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #35424a;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .like-btn:hover, .share-btn:hover {
+            background-color: #ed3978;
+        }
+        
+        .like-btn i, .share-btn i {
+            margin-right: 5px;
+        }
+        /* Post layout with flexbox */
+        .article-item {
+            background: #ffffff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 20px;
+        }
+        
+        .post-header {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .post-photo {
+            width: 150px;
+            height: 150px;
+            flex-shrink: 0; /* Prevent image from shrinking */
+            margin-right: 20px;
+        }
+        
+        .post-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .post-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+        
+        .post-info {
+            margin-top: 10px;
+        }
+        
+        .read-more {
+            color: blue;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        .read-more:hover {
+            color: #0056b3;
+        }
+        
+        /* Adjust text and layout styles */
+        h3 a {
+            font-size: 24px;
+            font-weight: bold;
+            color: #35424a;
+            text-decoration: none;
+        }
+        
+        h3 a:hover {
+            color: #007bff;
+        }
+        
+        small {
+            font-size: 14px;
+            color: #666;
+        }
+        /* Navigation menu styles */
+        nav ul {
+            list-style-type: none; /* Remove bullet points */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end; /* Align items to the right */
+            background-color: #35424a;
+            font-size: 18px;
 
- <style>
-       /* style.css */
+        }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
+        nav ul li {
+            margin-right: 20px; /* Space between menu items */
+        }
 
-header {
-    background: #35424a;
-    color: #ffffff;
-    padding: 10px 0;
-    text-align: center;
-}
+        nav ul li:last-child {
+            margin-right: 0; /* No extra margin for the last item */
+        }
 
-h1 {
-    margin: 0;
-}
+        nav ul li a {
+            color: #ffffff; /* White text */
+            text-decoration: none; /* Remove underline */
+            padding: 10px 15px; /* Add padding for better click area */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+            text-transform: uppercase; /* Make text uppercase */
+        }
 
-main {
-    margin: 20px;
-}
+        nav ul li a:hover {
+            color: #ed3978; /* Ensure text stays white on hover */
+        }
+/********************* back bottons***************/
 
-article {
-    background: #ffffff;
-    margin-bottom: 20px;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        /* Style for the back-links container */
+        .back-links {
+            display: flex; /* Use flexbox to arrange links side by side */
+            justify-content: flex-start; /* Align links to the left */
+            gap: 30px; /* Add space between the links */
+            margin-top: 20px; /* Add space above the links */
+            margin-bottom: 20px; /* Add space below the links */
+        }
 
-h3 a {
-    text-decoration: none;
-    color: #35424a;
-}
+        /* Style for each individual link */
+        .back-link {
+            font-size: 16px; /* Set font size */
+            color: #007bff; /* Blue color for the links */
+            transition: color 0.3s ease; /* Smooth transition for color change */
+        }
 
-h3 a:hover {
-    color: #007bff;
-}
+        .back-link:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
 
-p small {
-    color: #666;
-}
+/********************* add blog form***************/
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Style for individual error messages */
+        .errorlist li {
+            color:red;
+        }
 
-p {
-    line-height: 1.6;
-}
+        /* Styling for the form heading */
+        .form-header {
+            text-align: center;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 20px;
+        }
 
-/* Styling for the post image */
-.post-photo img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover; /* Ensures the image covers the container without distortion */
-    border-radius: 8px; /* Rounded corners for the image */
-    margin-right: 20px; /* Adds spacing between image and text */
-}
+        /* Styling for the form */
+        .create-post-form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-/* Button styling */
-.like-btn, .share-btn {
-    display: inline-block;
-    padding: 10px 15px;
-    margin-top: 10px;
-    margin-right: 10px;
-    text-decoration: none;
-    color: white;
-    background-color: #35424a;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    text-align: center;
-}
+        /* Style the individual form fields (inputs, textareas) */
+        .create-post-form .form-group {
+            margin-bottom: 20px;
+        }
 
-.like-btn:hover, .share-btn:hover {
-    background-color: #ed3978; /* Color change on hover */
-}
+        .create-post-form input, .create-post-form textarea, .create-post-form select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            color: #333;
+            box-sizing: border-box;
+        }
 
-.like-btn i, .share-btn i {
-    margin-right: 5px; /* Adds spacing between the icon and text */
-}
-/* Layout adjustments for articles */
-article {
-    background: #ffffff;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
-    display: flex;
-    gap: 20px;
-}
+        /* Add some margin between form fields */
+        .create-post-form .form-group + .form-group {
+            margin-top: 15px;
+        }
 
-.post-header {
-    flex: 1;
-}
+        /* Submit button styling */
+        .create-post-form button {
+            width: 100%;
+            padding: 15px;
+            background-color: #35424a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-h3 a {
-    font-size: 24px;
-    font-weight: bold;
-}
+        .create-post-form button:hover {
+            background-color: #0056b3;
+        }
+/********************* add blog form***************/
 
-.post-header p {
-    margin-top: 10px;
-}
-
-.post-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-/* Improved navigation menu */
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: flex-end;
-    background-color: #35424a;
-    font-size: 18px;
-}
-
-nav ul li {
-    margin-right: 20px;
-}
-
-nav ul li a {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #ed3978;
-}
-/* General text styling */
-p {
-    line-height: 1.6;
-    color: #333; /* Darker text for readability */
-}
-
-h3 {
-    margin-top: 0;
-}
-
-small {
-    font-size: 14px;
-    color: #666;
-}
-/* General styling */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-header {
-    background: #35424a;
-    color: #ffffff;
-    padding: 10px 0;
-    text-align: center;
-}
-
-h1 {
-    margin: 0;
-}
-
-/* Navigation styling */
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: flex-end;
-    background-color: #35424a;
-    font-size: 18px;
-}
-
-nav ul li {
-    margin-right: 20px;
-}
-
-nav ul li a {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background-color: #ed3978;
-}
-
-/* Main content area */
-main {
-    margin: 20px;
-}
-
-/* Article styles */
-article {
-    background: #ffffff;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 20px;
-}
-
-.post-header {
-    flex: 1;
-}
-
-.post-photo img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 20px;
-}
-
-h3 a {
-    text-decoration: none;
-    color: #35424a;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-h3 a:hover {
-    color: #007bff;
-}
-
-p small {
-    color: #666;
-}
-
-p {
-    line-height: 1.6;
-    color: #333;
-}
-
-/* Post action buttons (Like & Share) */
-.post-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.like-btn, .share-btn {
-    display: inline-block;
-    padding: 10px 15px;
-    margin-top: 10px;
-    margin-right: 10px;
-    text-decoration: none;
-    color: white;
-    background-color: #35424a;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    text-align: center;
-}
-
-.like-btn:hover, .share-btn:hover {
-    background-color: #ed3978;
-}
-
-.like-btn i, .share-btn i {
-    margin-right: 5px;
-}
-/* Post layout with flexbox */
-article {
-    background: #ffffff;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 20px;
-}
-
-.post-header {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.post-photo {
-    width: 150px;
-    height: 150px;
-    flex-shrink: 0; /* Prevent image from shrinking */
-    margin-right: 20px;
-}
-
-.post-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.post-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-grow: 1;
-}
-
-.post-info {
-    margin-top: 10px;
-}
-
-.read-more {
-    color: blue;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-.read-more:hover {
-    color: #0056b3;
-}
-
-/* Adjust text and layout styles */
-h3 a {
-    font-size: 24px;
-    font-weight: bold;
-    color: #35424a;
-    text-decoration: none;
-}
-
-h3 a:hover {
-    color: #007bff;
-}
-
-small {
-    font-size: 14px;
-    color: #666;
-}
     </style>
 </head>
 <body>
     <header>
         <h1>Welcome to My Blog</h1>
         <nav>
-            <ul>      
+            <ul> 
+                <li><a href="{% url 'blog:post_list' %}">Home</a></li>
+                <li><a href="{% url 'blog:user_posts' %}">My Posts</a></li>  
                 <li><a href="{% url 'authentication:logout' %}">Logout</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
         {% block content %}
         {% endblock %}

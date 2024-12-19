@@ -24,5 +24,3 @@ urlpatterns = [
     path('', include('authentication.urls', namespace='authentication')),
     path('blog/', include('blog.urls')),  # Include the blog app URLs
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

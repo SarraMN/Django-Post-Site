@@ -65,11 +65,22 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'posts',           # The name of your database
+        'USER': 'root',            # Your PostgreSQL username
+        'PASSWORD': 'admin',       # Your PostgreSQL password
+        'HOST': 'localhost',       # Host for Docker (use 'db' if accessing by service name within a network)
+        'PORT': '5432',            # Default PostgreSQL port
     }
 }
 
@@ -108,6 +119,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+#STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -116,7 +128,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-DEBUG = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -124,3 +135,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'amdounisirine80@gmail.com'
 EMAIL_HOST_PASSWORD = 'uieg clao ucge vdfv'
+
+LOGIN_URL =''
