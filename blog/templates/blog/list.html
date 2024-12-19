@@ -1,10 +1,11 @@
 {% extends "blog/base.html" %}
 {% load static %}
 
+{% load static %}
+
 {% block title %}Blog - Post List{% endblock %}
 
 {% block content %}
-<!-- Create New Blog button placed under the nav -->
 <!-- Create New Blog button placed under the nav -->
 <div style="text-align: right; margin-top: 20px;">
   <a href="{% url 'blog:create_post' %}" id="create-blog-btn" style="padding: 10px 20px; background-color: #ed3978; color: white; 
@@ -14,49 +15,68 @@
 </div>
   <h2>Blog Posts</h2>
   {% if user.is_authenticated %}
-  <p>Welcome, {{ user.username }}!</p>
+    <p>Welcome, {{ user.username }}!</p>
   {% else %}
     <p>You are not logged in.</p>
   {% endif %}
 
   {% for post in posts %}
     <article>
-      <div class="post-header">
-        <!-- Display photo or static photo -->
-        <div class="post-photo">
-          {% if post.photo %}
-            <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="post-img">
-          {% else %}
-            <img src="{% static 'default_image.jpg' %}" alt="Default image">
-          {% endif %}
-        </div>
-
-        <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
-        <p>
-          <small>
-            {% if post.publish %}
-              Published {{ post.publish|date:"F j, Y" }} 
-            {% endif %}
-            {% if post.author %}
-              by {{ post.author }}
-            {% endif %}
-          </small>
-        </p>
+      <div class="post-photo">
+        {% if post.photo %}
+          <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="post-img">
+        {% else %}
+          <img src="{% static 'default_image.jpg' %}" alt="Default image">
+        {% endif %}
       </div>
 
-      {% if post.status %}
-        <p>Status: {{ post.get_status_display }}</p>
-      {% endif %}
-      <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+      <div class="post-body">
+        <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
+        <div class="post-info">
+          <p>
+            <small>
+              {% if post.publish %}
+                Published {{ post.publish|date:"F j, Y" }}
+              {% endif %}
+              {% if post.author %}
+                by {{ post.author }}
+              {% endif %}
+            </small>
+          </p>
+          {% if post.status %}
+            <p>Status: {{ post.get_status_display }}</p>
+          {% endif %}
+        </div>
+        <p>
+          {{ post.body|slice:150 }}{% if post.body|length > 150 %}...{% endif %}
+          {% if post.body|length > 150 %}
+            <a href="{% url 'blog:post_detail' post.id %}" class="read-more">Read More</a>
+          {% endif %}
+        </p>
 
-      <!-- Like and Share Icons -->
-      <div class="post-actions">
-        <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
-          <i class="fa fa-thumbs-up"></i> Like
-        </a>
-        <a href="mailto:?subject=Check out this blog post&body={{ post.title }}%0A{{ post.get_absolute_url }}" class="share-btn">
-          <i class="fa fa-share-alt"></i> Share by Email
-        </a>
+        <!-- Like and Share Icons -->
+        <div class="post-actions">
+          {% if post.id in liked_posts %}
+          <!-- If the user has liked the post, show a 'dislike' button -->
+          <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
+            <i class="fa fa-thumbs-down"></i> Dislike
+          </a>
+        {% else %}
+          <!-- If the user hasn't liked the post, show a 'like' button -->
+          <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
+            <i class="fa fa-thumbs-up"></i> Like
+          </a>
+        {% endif %}
+            <!-- Share Post via Email Form -->
+        <form method="POST" action="{% url 'blog:share_post_via_email' post.id %}">
+          {% csrf_token %}
+          <label for="email">Share this post via email:</label>
+          <input type="email" name="email" id="email" required placeholder="Enter recipient's email">
+          <button type="submit" class="share-btn">
+            <i class="fa fa-share-alt"></i> Share via Email
+          </button>
+        </form>
+        </div>
       </div>
     </article>
   {% endfor %}

@@ -9,5 +9,5 @@ urlpatterns = [
     path('like/<int:post_id>/', views.like_post, name='like_post'),
     path('my-posts/', views.user_posts, name='user_posts'),  # New route for user-specific posts
     path('create/', views.create_post, name='create_post'),
-
+    path('share/<int:post_id>/', views.share_post_via_email, name='share_post_via_email'),
 ]
