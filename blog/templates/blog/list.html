@@ -4,23 +4,51 @@
 
 {% block content %}
   <h2>Blog Posts</h2>
+  {% if user.is_authenticated %}
+  <p>Welcome, {{ user.username }}!</p>
+  {% else %}
+    <p>You are not logged in.</p>
+  {% endif %}
+
   {% for post in posts %}
     <article>
-      <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
-      <p>
-        <small>
-          {% if post.publish %}
-            Published {{ post.publish|date:"F j, Y" }} 
+      <div class="post-header">
+        <!-- Display photo or static photo -->
+        <div class="post-photo">
+          {% if post.photo %}
+            <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="post-img">
+          {% else %}
+            <img src="{% static 'default_image.jpg' %}" alt="Default image">
           {% endif %}
-          {% if post.author %}
-            by {{ post.author }}
-          {% endif %}
-        </small>
-      </p>
+        </div>
+
+        <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
+        <p>
+          <small>
+            {% if post.publish %}
+              Published {{ post.publish|date:"F j, Y" }} 
+            {% endif %}
+            {% if post.author %}
+              by {{ post.author }}
+            {% endif %}
+          </small>
+        </p>
+      </div>
+
       {% if post.status %}
         <p>Status: {{ post.get_status_display }}</p>
       {% endif %}
       <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+
+      <!-- Like and Share Icons -->
+      <div class="post-actions">
+        <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
+          <i class="fa fa-thumbs-up"></i> Like
+        </a>
+        <a href="mailto:?subject=Check out this blog post&body={{ post.title }}%0A{{ post.get_absolute_url }}" class="share-btn">
+          <i class="fa fa-share-alt"></i> Share by Email
+        </a>
+      </div>
     </article>
   {% endfor %}
 {% endblock %}
