@@ -1,16 +1,40 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-  <div class="back-links">
+<link rel="stylesheet" type="text/css" href="{% static 'blog/css/styles.css' %}">
+<div class="back-links">
     <a href="{% url 'blog:post_list' %}" class="back-link">Back to all posts</a>
     <a href="{% url 'blog:user_posts' %}" class="back-link">Back to my posts</a>
-  </div>
-  <article>
+</div>
+<article>
     <h2>{{ post.title }}</h2>
     <p><small>Published {{ post.publish }} by {{ post.author }}</small></p>
     <p>{{ post.body|linebreaks }}</p>
-  </article>
+</article>
+
+<!-- Comment Section -->
+<section class="comments">
+    <h3>Comments</h3>
+    {% for comment in post.comments.all %}
+    <div class="comment">
+        <p><strong>{{ comment.author.last_name  }} {{ comment.author.first_name  }}</strong> said:</p>
+        <p>{{ comment.body }}</p>
+    </div>
+    {% empty %}
+    <p>No comments yet. Be the first to comment!</p>
+    {% endfor %}
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'blog:post_detail' post.id %}">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit">Add Comment</button>
+    </form>
   
+    {% else %}
+    <p>You must be logged in to comment.</p>
+    {% endif %}
+</section>
 {% endblock %}

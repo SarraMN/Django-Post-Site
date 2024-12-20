@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 from django.core.mail import send_mail
 from django.conf import settings
+from .forms import CommentForm
 from taggit.models import Tag
 
 @login_required
@@ -22,10 +23,28 @@ def post_list(request):
     return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts, 'tag_name': tag_name})
 
 @login_required
-def post_detail(request, id):
-    post = get_object_or_404(Post, id=id)
-    return render(request, 'blog/detail.html', {'post': post})
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = post.comments.all()
+    new_comment = None
 
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.author = request.user  # Assign the current user as the author
+            new_comment.save()
+            return redirect('blog:post_detail', post_id=post.id)
+    else:
+        comment_form = CommentForm()
+
+    return render(request, 'blog/detail.html', {
+        'post': post,
+        'comments': comments,
+        'new_comment': new_comment,
+        'comment_form': comment_form
+    })
 @login_required
 def user_posts(request):
     tag_name = request.GET.get('tag')  # Get the tag from the query parameters
@@ -114,3 +133,18 @@ def share_post_via_email(request, post_id):
         return redirect('blog:post_list')
 
     return redirect('blog:post_list')  # If not POST, just redirect to the post list
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user  # Ensure the author is set
+            comment.save()
+            return redirect('blog:post_detail', post_id=post.id)
+    else:
+        form = CommentForm()
+    return render(request, 'blog/detail.html', {'post': post, 'form': form})
