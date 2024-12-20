@@ -5,12 +5,21 @@ from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 from django.core.mail import send_mail
 from django.conf import settings
+from taggit.models import Tag
 
 @login_required
 def post_list(request):
+    tag_name = request.GET.get('tag')  # Get the tag from the query parameters
     posts = Post.objects.filter(status=Post.Status.PUBLISHED)  # Filter for published posts
-    liked_posts = Like.objects.filter(user=request.user).values_list('post', flat=True)  # Get liked posts by the current user
-    return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts})
+    liked_posts = Like.objects.filter(user=request.user).values_list('post', flat=True)  # Get liked posts by the user
+
+    # Filter posts by tag if a tag name is provided
+    if tag_name:
+        tag = Tag.objects.filter(name__iexact=tag_name).first()  # Case-insensitive search for the tag
+        if tag:
+            posts = posts.filter(tags=tag)
+
+    return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts, 'tag_name': tag_name})
 
 @login_required
 def post_detail(request, id):
@@ -19,7 +28,14 @@ def post_detail(request, id):
 
 @login_required
 def user_posts(request):
+    tag_name = request.GET.get('tag')  # Get the tag from the query parameters
     posts = Post.objects.filter(author=request.user)
+     # Filter posts by tag if a tag name is provided
+    if tag_name:
+        tag = Tag.objects.filter(name__iexact=tag_name).first()  # Case-insensitive search for the tag
+        if tag:
+            posts = posts.filter(tags=tag)
+
     return render(request, 'blog/user_posts.html', {'posts': posts})
 
 @login_required
@@ -30,6 +46,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user  # Set the logged-in user as the author
             post.save()
+            form.save_m2m()
             return redirect('blog:user_posts')  # Redirect to the user's posts page
     else:
         form = PostForm()
