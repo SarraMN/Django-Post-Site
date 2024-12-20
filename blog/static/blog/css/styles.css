@@ -1,11 +1,14 @@
 /* Article */
+/* Article */
 article {
     max-width: 800px;
     margin: 20px auto;
     background: #fff;
     padding: 20px;
     border-radius: 8px;
+    word-wrap: break-word; /* Ensure long words break and wrap to the next line */
 }
+
 
 /* Comments Section */
 .comments {
