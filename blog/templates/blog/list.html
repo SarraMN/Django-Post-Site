@@ -1,8 +1,6 @@
 {% extends "blog/base.html" %}
 {% load static %}
 
-{% load static %}
-
 {% block title %}Blog - Post List{% endblock %}
 
 {% block content %}
@@ -19,7 +17,19 @@
   {% else %}
     <p>You are not logged in.</p>
   {% endif %}
-
+  <form method="get" action="{% url 'blog:post_list' %}" style="margin-bottom: 20px;">
+    <input 
+      type="text" 
+      name="tag" 
+      placeholder="Filter by tag" 
+      value="{{ request.GET.tag }}" 
+      style="padding: 5px; width: 250px; border: 1px solid #ccc; border-radius: 5px;">
+    <button 
+      type="submit" 
+      style="padding: 5px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      Filter
+    </button>
+  </form>
   {% for post in posts %}
     <article class="article-item ">
       <div class="post-photo">
@@ -47,6 +57,16 @@
             <p>Status: {{ post.get_status_display }}</p>
           {% endif %}
         </div>
+        <!-- Tag Display -->
+        {% if post.tags.exists %}
+          <div class="post-tags">
+            <strong>Tags:</strong>
+            {% for tag in post.tags.all %}
+              <a href="{% url 'blog:post_list' %}?tag={{ tag.name }}" class="tag">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
         <p>
           {{ post.body|slice:150 }}{% if post.body|length > 150 %}...{% endif %}
           {% if post.body|length > 150 %}
@@ -68,36 +88,14 @@
           </a>
         {% endif %}
             <!-- Share Post via Email Form -->
-           <!-- Trigger button -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#shareModal">
-  <i class="fa fa-share-alt"></i> Share via Email
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shareModalLabel">Share Post via Email</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
         <form method="POST" action="{% url 'blog:share_post_via_email' post.id %}">
           {% csrf_token %}
-          <div class="mb-3">
-            <label for="email" class="form-label">Recipient's Email</label>
-            <input type="email" class="form-control" name="email" id="email" required placeholder="Enter recipient's email">
-          </div>
-          <button type="submit" class="btn btn-primary">
+          <label for="email">Share this post via email:</label>
+          <input type="email" name="email" id="email" required placeholder="Enter recipient's email">
+          <button type="submit" class="share-btn">
             <i class="fa fa-share-alt"></i> Share via Email
           </button>
         </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
         </div>
       </div>
     </article>

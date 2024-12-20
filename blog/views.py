@@ -6,12 +6,21 @@ from .forms import PostForm
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import CommentForm
+from taggit.models import Tag
 
 @login_required
 def post_list(request):
-    posts = Post.objects.all()
-    liked_posts = Like.objects.filter(user=request.user).values_list('post', flat=True)  # Get liked posts by the current user
-    return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts})
+    tag_name = request.GET.get('tag')  # Get the tag from the query parameters
+    posts = Post.objects.filter(status=Post.Status.PUBLISHED)  # Filter for published posts
+    liked_posts = Like.objects.filter(user=request.user).values_list('post', flat=True)  # Get liked posts by the user
+
+    # Filter posts by tag if a tag name is provided
+    if tag_name:
+        tag = Tag.objects.filter(name__iexact=tag_name).first()  # Case-insensitive search for the tag
+        if tag:
+            posts = posts.filter(tags=tag)
+
+    return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts, 'tag_name': tag_name})
 
 @login_required
 def post_detail(request, post_id):
@@ -38,7 +47,14 @@ def post_detail(request, post_id):
     })
 @login_required
 def user_posts(request):
+    tag_name = request.GET.get('tag')  # Get the tag from the query parameters
     posts = Post.objects.filter(author=request.user)
+     # Filter posts by tag if a tag name is provided
+    if tag_name:
+        tag = Tag.objects.filter(name__iexact=tag_name).first()  # Case-insensitive search for the tag
+        if tag:
+            posts = posts.filter(tags=tag)
+
     return render(request, 'blog/user_posts.html', {'posts': posts})
 
 @login_required
@@ -49,10 +65,31 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user  # Set the logged-in user as the author
             post.save()
+            form.save_m2m()
             return redirect('blog:user_posts')  # Redirect to the user's posts page
     else:
         form = PostForm()
     return render(request, 'blog/create_post.html', {'form': form})
+
+@login_required
+def edit_post(request, id):
+    post = get_object_or_404(Post, id=id, author=request.user)  # Ensure only the author can edit
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:user_posts')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
+
+@login_required
+def delete_post(request, id):
+    post = get_object_or_404(Post, id=id, author=request.user)  # Ensure only the author can delete
+    if request.method == "POST":
+        post.delete()
+        return redirect('blog:user_posts')
+    return render(request, 'blog/delete_post_confirm.html', {'post': post})
 
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)   
