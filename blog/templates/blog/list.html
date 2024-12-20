@@ -4,119 +4,114 @@
 {% block title %}Blog - Post List{% endblock %}
 
 {% block content %}
-<!-- Create New Blog button placed under the nav -->
 <div style="text-align: right; margin-top: 20px;">
   <a href="{% url 'blog:create_post' %}" id="create-blog-btn" style="padding: 10px 20px; background-color: #ed3978; color: white; 
             text-decoration: none; border-radius: 5px; cursor: pointer;">
      Create New Blog
   </a>
 </div>
-  <h2>Blog Posts</h2>
-  {% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }}!</p>
-  {% else %}
-    <p>You are not logged in.</p>
-  {% endif %}
-  <form method="get" action="{% url 'blog:post_list' %}" style="margin-bottom: 20px;">
-    <input 
-      type="text" 
-      name="tag" 
-      placeholder="Filter by tag" 
-      value="{{ request.GET.tag }}" 
-      style="padding: 5px; width: 250px; border: 1px solid #ccc; border-radius: 5px;">
-    <button 
-      type="submit" 
-      style="padding: 5px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
-      Filter
-    </button>
-  </form>
-  {% for post in posts %}
-    <article class="article-item ">
-      <div class="post-photo">
-        {% if post.photo %}
-          <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="post-img">
-        {% else %}
-          <img src="{% static 'default_image.jpg' %}" alt="Default image">
+
+<h2>Blog Posts</h2>
+{% if user.is_authenticated %}
+  <p>Welcome, {{ user.username }}!</p>
+{% else %}
+  <p>You are not logged in.</p>
+{% endif %}
+
+<form method="get" action="{% url 'blog:post_list' %}" style="margin-bottom: 20px;">
+  <input 
+    type="text" 
+    name="tag" 
+    placeholder="Filter by tag" 
+    value="{{ request.GET.tag }}" 
+    style="padding: 5px; width: 250px; border: 1px solid #ccc; border-radius: 5px;">
+  <button 
+    type="submit" 
+    style="padding: 5px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Filter
+  </button>
+</form>
+
+{% for post in posts %}
+  <article class="article-item">
+    <div class="post-photo">
+      {% if post.photo %}
+        <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="post-img">
+      {% else %}
+        <img src="{% static 'default_image.jpg' %}" alt="Default image">
+      {% endif %}
+    </div>
+
+    <div class="post-body">
+      <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
+      <div class="post-info">
+        <p>
+          <small>
+            {% if post.publish %}
+              Published {{ post.publish|date:"F j, Y" }}
+            {% endif %}
+            {% if post.author %}
+              by {{ post.author }}
+            {% endif %}
+          </small>
+        </p>
+        {% if post.status %}
+          <p>Status: {{ post.get_status_display }}</p>
         {% endif %}
       </div>
-
-      <div class="post-body">
-        <h3><a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h3>
-        <div class="post-info">
-          <p>
-            <small>
-              {% if post.publish %}
-                Published {{ post.publish|date:"F j, Y" }}
-              {% endif %}
-              {% if post.author %}
-                by {{ post.author }}
-              {% endif %}
-            </small>
-          </p>
-          {% if post.status %}
-            <p>Status: {{ post.get_status_display }}</p>
-          {% endif %}
+      <!-- Tag Display -->
+      {% if post.tags.exists %}
+        <div class="post-tags">
+          <strong>Tags:</strong>
+          {% for tag in post.tags.all %}
+            <a href="{% url 'blog:post_list' %}?tag={{ tag.name }}" class="tag">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+          {% endfor %}
         </div>
-        <!-- Tag Display -->
-        {% if post.tags.exists %}
-          <div class="post-tags">
-            <strong>Tags:</strong>
-            {% for tag in post.tags.all %}
-              <a href="{% url 'blog:post_list' %}?tag={{ tag.name }}" class="tag">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-          </div>
+      {% endif %}
+
+      <p>
+        {{ post.body|slice:150 }}{% if post.body|length > 150 %}...{% endif %}
+        {% if post.body|length > 150 %}
+          <a href="{% url 'blog:post_detail' post.id %}" class="read-more">Read More</a>
         {% endif %}
+      </p>
 
-        <p>
-          {{ post.body|slice:150 }}{% if post.body|length > 150 %}...{% endif %}
-          {% if post.body|length > 150 %}
-            <a href="{% url 'blog:post_detail' post.id %}" class="read-more">Read More</a>
-          {% endif %}
-        </p>
-
-        <!-- Like and Share Icons -->
-        <div class="post-actions">
-          {% if post.id in liked_posts %}
-          <!-- If the user has liked the post, show a 'dislike' button -->
+      <!-- Like and Share Icons -->
+      <div class="post-actions">
+        {% if post.id in liked_posts %}
           <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
             <i class="fa fa-thumbs-down"></i> Dislike
           </a>
         {% else %}
-          <!-- If the user hasn't liked the post, show a 'like' button -->
           <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
             <i class="fa fa-thumbs-up"></i> Like
           </a>
         {% endif %}
-          <!-- Share Post via Email Form -->
-          <!-- Trigger button -->
-          <button type="button" class="btn btn-primary" id="share-btn" data-bs-toggle="modal" data-bs-target="#shareModal">
-            <i class="fa fa-share-alt"></i> Share via Email
-          </button>
-          <!-- Modal -->
-          <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="shareModalLabel">Share Post via Email</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form method="POST" action="{% url 'blog:share_post_via_email' post.id %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                      <label for="email" class="form-label">Recipient's Email</label>
-                      <input type="email" class="form-control" name="email" id="email" required placeholder="Enter recipient's email">
-                    </div>
-                    <button type="submit" class="btn btn-primary">
-                      <i class="fa fa-share-alt"></i> Share via Email
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button type="button" class="btn btn-primary" id="share-btn" data-bs-toggle="modal" data-bs-target="#shareModal">
+          <i class="fa fa-share-alt"></i> Share via Email
+        </button>
       </div>
-    </article>
-  {% endfor %}
+    </div>
+  </article>
+{% endfor %}
+
+<!-- Pagination Controls -->
+<div class="pagination">
+  <span class="step-links">
+    {% if posts.has_previous %}
+      <a href="?page=1{% if tag_name %}&tag={{ tag_name }}{% endif %}">&laquo; first</a>
+      <a href="?page={{ posts.previous_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">previous</a>
+    {% endif %}
+
+    <span class="current">
+      Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+    </span>
+
+    {% if posts.has_next %}
+      <a href="?page={{ posts.next_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">next</a>
+      <a href="?page={{ posts.paginator.num_pages }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
+
 {% endblock %}

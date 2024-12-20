@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import CommentForm
 from taggit.models import Tag
+from django.core.paginator import Paginator
 
 @login_required
 def post_list(request):
@@ -20,7 +21,16 @@ def post_list(request):
         if tag:
             posts = posts.filter(tags=tag)
 
-    return render(request, 'blog/list.html', {'posts': posts, 'liked_posts': liked_posts, 'tag_name': tag_name})
+    # Pagination
+    paginator = Paginator(posts, 5)  # Show 5 posts per page
+    page_number = request.GET.get('page')  # Get the current page number from the URL
+    page_obj = paginator.get_page(page_number)  # Get the posts for the current page
+
+    return render(request, 'blog/list.html', {
+        'posts': page_obj,
+        'liked_posts': liked_posts,
+        'tag_name': tag_name,
+    })
 
 @login_required
 def post_detail(request, post_id):
