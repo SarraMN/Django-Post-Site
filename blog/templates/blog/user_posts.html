@@ -14,8 +14,22 @@
 
 <h2>My Blog Posts</h2>
 
-{% if posts %}
-  {% for post in posts %}
+<form method="get" action="{% url 'blog:user_posts' %}" style="margin-bottom: 20px;">
+  <input 
+    type="text" 
+    name="tag" 
+    placeholder="Filter by tag" 
+    value="{{ request.GET.tag }}" 
+    style="padding: 5px; width: 250px; border: 1px solid #ccc; border-radius: 5px;">
+  <button 
+    type="submit" 
+    style="padding: 5px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Filter
+  </button>
+</form>
+
+{% if page_obj %}
+  {% for post in page_obj %}
     <article class="article-item">
       <div class="post-photo">
         {% if post.photo %}
@@ -73,6 +87,26 @@
       </div>
     </article>
   {% endfor %}
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page=1{% if tag_name %}&tag={{ tag_name }}{% endif %}">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+
 {% else %}
   <p>You haven't published any blog posts yet.</p>
 {% endif %}

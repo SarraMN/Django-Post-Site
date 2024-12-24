@@ -69,6 +69,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+""" DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'posts',           # The name of your database
         'USER': 'root',            # Your PostgreSQL username
@@ -76,8 +83,7 @@ DATABASES = {
         'HOST': 'localhost',       # Host for Docker (use 'db' if accessing by service name within a network)
         'PORT': '5432',            # Default PostgreSQL port
     }
-}
-
+} """
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -127,8 +133,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'amdounisirine80@gmail.com'
-EMAIL_HOST_PASSWORD = 'uieg clao ucge vdfv'
+#EMAIL_HOST_USER = 'add gmail'
+#EMAIL_HOST_PASSWORD = 'add password'
 
 LOGIN_URL =''
 AUTH_USER_MODEL = 'authentication.CustomUser'

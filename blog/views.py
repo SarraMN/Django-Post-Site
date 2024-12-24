@@ -8,7 +8,7 @@ from django.conf import settings
 from .forms import CommentForm
 from taggit.models import Tag
 from django.core.paginator import Paginator
-
+from django.db.models import Count
 @login_required
 def post_list(request):
     tag_name = request.GET.get('tag')  # Get the tag from the query parameters
@@ -20,6 +20,12 @@ def post_list(request):
         tag = Tag.objects.filter(name__iexact=tag_name).first()  # Case-insensitive search for the tag
         if tag:
             posts = posts.filter(tags=tag)
+
+    posts = posts.annotate(
+        num_comments=Count('comments'),
+        num_likes=Count('likes'),
+        num_shares=Count('shares')
+    )
 
     # Pagination
     paginator = Paginator(posts, 5)  # Show 5 posts per page
@@ -55,17 +61,24 @@ def post_detail(request, post_id):
         'new_comment': new_comment,
         'comment_form': comment_form
     })
+
 @login_required
 def user_posts(request):
     tag_name = request.GET.get('tag')  # Get the tag from the query parameters
     posts = Post.objects.filter(author=request.user)
-     # Filter posts by tag if a tag name is provided
+
+    # Filter posts by tag if a tag name is provided
     if tag_name:
         tag = Tag.objects.filter(name__iexact=tag_name).first()  # Case-insensitive search for the tag
         if tag:
             posts = posts.filter(tags=tag)
 
-    return render(request, 'blog/user_posts.html', {'posts': posts})
+    # Paginate the posts
+    paginator = Paginator(posts, 5)  # Show 5 posts per page
+    page_number = request.GET.get('page')  # Get the page number from query parameters
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'blog/user_posts.html', {'page_obj': page_obj})
 
 @login_required
 def create_post(request):
@@ -134,8 +147,8 @@ def share_post_via_email(request, post_id):
         send_mail(
             subject,
             body,
-            settings.EMAIL_HOST_USER,  # From email (current user's email)
-            [recipient_email],  # Send the email to the recipient's email
+            settings.EMAIL_HOST_USER, 
+            [recipient_email], 
             fail_silently=False,
         )
 

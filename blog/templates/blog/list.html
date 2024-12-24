@@ -76,8 +76,15 @@
         {% endif %}
       </p>
 
-      <!-- Like and Share Icons -->
+      <!-- Display Comments, Likes, and Shares Counts -->
       <div class="post-actions">
+        <p class="post-stats">
+          <span class="comments-count">{{ post.num_comments }} Comments</span> |
+          <span class="likes-count">{{ post.num_likes }} Likes</span> |
+          <span class="shares-count">{{ post.num_shares }} Shares</span>
+        </p>
+        
+
         {% if post.id in liked_posts %}
           <a href="{% url 'blog:like_post' post.id %}" class="like-btn">
             <i class="fa fa-thumbs-down"></i> Dislike
